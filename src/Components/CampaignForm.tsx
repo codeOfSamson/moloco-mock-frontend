@@ -1,7 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 
-const CampaignForm = () => {
+type CampaignFormProps = {
+  fetchCampaigns: () => Promise<void>;
+};
+
+const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
+
   const [name, setName] = useState("");
 
   const createCampaign = async () => {
@@ -17,6 +22,7 @@ const CampaignForm = () => {
       });
       alert("Campaign created!");
       setName("");
+      fetchCampaigns()
     } catch (error) {
       alert("Error creating campaign");
       console.error(error);
@@ -33,7 +39,7 @@ const CampaignForm = () => {
         onChange={(e) => setName(e.target.value)}
         className="border p-2"
       />
-      <button onClick={createCampaign} className="bg-blue-500 text-white p-2 ml-2">
+      <button onClick={()=>{createCampaign()}} className="bg-blue-500 text-white p-2 ml-2">
         Create
       </button>
     </div>

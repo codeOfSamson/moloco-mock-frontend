@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
 
-const CampaignList = () => {
-    type Campaign = {
-        campaign_id: string;  
-        name: string;  
-      };
-      
-      const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+type Campaign = {
+  campaign_id: string;
+  name: string;
+  creative_group_ids: string[];
+  status: string;
+  impressions: number;
+};
+type CampaignListProps = {
+  campaigns: Campaign[];
+  setCampaigns: React.Dispatch<React.SetStateAction<Campaign[]>>;
+  fetchCampaigns: () => Promise<void>;
 
-  const fetchCampaigns = async () => {
-    try {
-      const { data } = await axios.get("http://127.0.0.1:8000/campaigns/");
-      setCampaigns(data.campaigns);
-    } catch (error) {
-      console.error("Error fetching campaigns", error);
-    }
-  };
+};
+
+const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListProps) => {
+
+
 
   const runCampaign = async (campaignId: string) => {
     try {
@@ -29,9 +29,6 @@ const CampaignList = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCampaigns();
-  }, []);
 
   return (
     <div className="p-4">
