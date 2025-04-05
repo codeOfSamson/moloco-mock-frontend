@@ -1,5 +1,6 @@
 import CampaignForm from "./Components/CampaignForm"
 import CampaignList from "./Components/CampaignList";
+import CreativeGroupsPage from "./Components/CreativeGroupsPage";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -20,7 +21,6 @@ function App() {
   const fetchCampaigns = async () => {
     try {
       const { data } = await axios.get("http://127.0.0.1:8000/campaigns/");
-      console.log(1, data)
       setCampaigns(data as Campaign[]);
     } catch (error) {
       console.error("Error fetching campaigns", error);
@@ -37,6 +37,7 @@ function App() {
       <h1 className="text-2xl font-bold">Moloco Ad Campaign Manager</h1>
       <CampaignForm fetchCampaigns={fetchCampaigns} />
      <CampaignList campaigns={campaigns} setCampaigns={setCampaigns} fetchCampaigns={fetchCampaigns} />
+     <CreativeGroupsPage />
     </div>
   );
 }
