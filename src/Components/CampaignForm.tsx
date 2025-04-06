@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+
 
 type CampaignFormProps = {
   fetchCampaigns: () => Promise<void>;
@@ -14,7 +16,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
 
     try {
       await axios.post("http://127.0.0.1:8000/campaigns/", {
-        campaign_id: name.replace(/\s+/g, "_").toLowerCase(),
+        campaign_id: uuidv4(),
         name,
         creative_group_ids: [],
         status: "paused",

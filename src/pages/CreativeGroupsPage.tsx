@@ -1,25 +1,14 @@
-import { useState } from "react";
+//import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import CreativeGroupForm from "../Components/CreativeGroupForm";
 
 const CreativeGroupsPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  console.log('serParam:', searchParams.get("campaignId"))
+  const name = searchParams?.get("name")
 
-  const [groupCount, setGroupCount] = useState(1);
-  const [groupIds, setGroupIds] = useState<string[]>(["Creative_Group_1"]);
-
-  const handleAddGroup = () => {
-    const newId = `Creative_Group_${groupCount + 1}`;
-    setGroupIds([...groupIds, newId]);
-    setGroupCount(groupCount + 1);
-  };
-
-  const handleSaveGroup = (groupId: string, creatives: any[]) => {
-    console.log("Saving group:", groupId);
-    console.log("Creatives:", creatives);
-
-    // TODO: POST to backend
-  };
 
   const handleBack = () => {
     navigate(`/`);
@@ -27,18 +16,13 @@ const CreativeGroupsPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Creative Groups</h1>
-
-      {groupIds.map((id) => (
-        <CreativeGroupForm groupId={id} onSubmit={handleSaveGroup} />
-      ))}
-
-      <button onClick={handleAddGroup} className="mt-4 text-blue-600">
-        + Add New Creative Group
-      </button>
+      <h1 className="text-2xl font-bold mb-4">Campaign {name}</h1>
       <button onClick={handleBack} className="mt-4 text-blue-600">
         Go Back
       </button>
+     
+        <CreativeGroupForm />
+     
     </div>
   );
 };

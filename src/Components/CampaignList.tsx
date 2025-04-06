@@ -29,8 +29,8 @@ const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
     }
   };
 
-  const handleAttachCreativeGroup = (campaignId: string) => {
-    navigate(`/creative-groups?campaignId=${campaignId}`);
+  const handleAttachCreativeGroup = (name: string) => {
+    navigate(`/creative-groups?name=${name}`);
   };
 
   return (
@@ -51,7 +51,7 @@ const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
               </div>
               <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
                 <button
-                  onClick={() => handleAttachCreativeGroup(campaign.campaign_id)}
+                  onClick={() => handleAttachCreativeGroup(campaign.name)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition"
                 >
                   Attach Creative Group
