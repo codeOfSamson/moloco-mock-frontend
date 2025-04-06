@@ -93,10 +93,11 @@ export default function CampaignCreativeForm() {
       // Upload creatives one by one
       for (const group of creativeGroups) {
         for (const creative of group.creatives) {
+          console.log('prepost',creative)
           await axios.post("http://localhost:8000/creatives", creative);
         }
 
-        await axios.post("http://localhost:8000/creative_groups", {
+        await axios.post("http://localhost:8000/creative-groups", {
           group_id: group.group_id,
           group_name: group.group_name,
           creative_ids: group.creatives.map((c) => c.creative_id),
@@ -104,12 +105,10 @@ export default function CampaignCreativeForm() {
       }
 
       // Upload campaign last, linking creative group IDs
-      await axios.post("http://localhost:8000/campaigns", {
+      await axios.put("http://localhost:8000/campaigns/${campaignId}", {
         campaign_id,
-       // name: campaignName,
         creative_group_ids: creativeGroups.map((g) => g.group_id),
-        status: "PENDING",
-        impressions: 0,
+    
       });
 
       alert("Campaign and assets uploaded successfully!");

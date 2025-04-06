@@ -13,6 +13,11 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
 
   const createCampaign = async () => {
     if (!name) return alert("Campaign name required");
+    // campaign_id: Optional[str] = None  
+    // name: str
+    // creative_groups_ids: List[str]  
+    // status: str = "paused"
+    // impressions: int = 0
 
     try {
       await axios.post("http://127.0.0.1:8000/campaigns/", {
