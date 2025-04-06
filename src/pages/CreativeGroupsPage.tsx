@@ -1,7 +1,10 @@
 import { useState } from "react";
-import CreativeGroupForm from "./CreativeGroupForm";
+import { useNavigate } from "react-router-dom";
+import CreativeGroupForm from "../Components/CreativeGroupForm";
 
 const CreativeGroupsPage = () => {
+  const navigate = useNavigate();
+
   const [groupCount, setGroupCount] = useState(1);
   const [groupIds, setGroupIds] = useState<string[]>(["Creative_Group_1"]);
 
@@ -18,6 +21,10 @@ const CreativeGroupsPage = () => {
     // TODO: POST to backend
   };
 
+  const handleBack = () => {
+    navigate(`/`);
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Creative Groups</h1>
@@ -28,6 +35,9 @@ const CreativeGroupsPage = () => {
 
       <button onClick={handleAddGroup} className="mt-4 text-blue-600">
         + Add New Creative Group
+      </button>
+      <button onClick={handleBack} className="mt-4 text-blue-600">
+        Go Back
       </button>
     </div>
   );

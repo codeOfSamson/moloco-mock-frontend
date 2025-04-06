@@ -1,4 +1,3 @@
-// src/components/CreativeGroupForm.tsx
 import { useState } from "react";
 
 type Creative = {
@@ -13,25 +12,8 @@ type CreativeGroupFormProps = {
 };
 
 
-// type Campaign = {
-//     campaign_id: string;
-//     name: string;
-//     creative_group_ids: string[];
-//     status: string;
-//     impressions: number;
-//   };
-//   type CampaignListProps = {
-//     campaigns: Campaign[];
-//     setCampaigns: React.Dispatch<React.SetStateAction<Campaign[]>>;
-//     fetchCampaigns: () => Promise<void>;
-  
-//   };
-
-
-
-
 export default function CreativeGroupForm({ groupId, onSubmit }: CreativeGroupFormProps) {
-    console.log(groupId)
+    console.log('creative group form:', groupId)
   const [groupName, setGroupName] = useState("");
   const [creatives, setCreatives] = useState<Creative[]>([
     { type: "VIDEO", auto_endcard: true, file_url: "" },
