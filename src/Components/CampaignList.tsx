@@ -80,7 +80,7 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
               <div className="flex-1">
                 <button
                   onClick={() => toggleExpand(campaign.campaign_id)}
-                  className="flex items-center gap-2 text-left text-lg font-bold text-gray-800 hover:underline"
+                  className="flex items-center gap-2 text-left text-lg text-white font-bold text-gray-800 hover:underline"
                 >
                   {expanded === campaign.campaign_id ? <ChevronUp /> : <ChevronDown />}
                   {campaign.name}
@@ -110,10 +110,10 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
                 
                 {expandedData[campaign.campaign_id].creative_groups?.map((group) => (
                   <div key={group.creative_group_id} className="mb-3">
-                    <h4 className="font-semibold">Group: {group.name}</h4>
+                    <h4 className="font-semibold text-black">Group: {group.name}</h4>
                     <table className="w-full text-sm text-left border mt-2">
                       <thead>
-                        <tr className="bg-gray-100">
+                        <tr className="bg-gray-400">
                           <th className="p-2 border">Creative ID</th>
                           <th className="p-2 border">Type</th>
                           <th className="p-2 border">File URL</th>
@@ -122,7 +122,7 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
                       </thead>
                       <tbody>
                         {group.creatives?.map((creative) => (
-                          <tr key={creative.creative_id}>
+                          <tr key={creative.creative_id} className="text-black">
                             <td className="p-2 border">{creative.creative_id}</td>
                             <td className="p-2 border">{creative.type}</td>
                             <td className="p-2 border">{creative.file_url}</td>
