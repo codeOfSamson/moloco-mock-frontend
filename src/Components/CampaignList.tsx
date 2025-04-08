@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-// Type definitions
 interface Creative {
   creative_id: string;
   type: string;
@@ -108,6 +107,7 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
 
             {expanded === campaign.campaign_id && expandedData[campaign.campaign_id] && (
               <div className="mt-4 border-t pt-4">
+                
                 {expandedData[campaign.campaign_id].creative_groups?.map((group) => (
                   <div key={group.creative_group_id} className="mb-3">
                     <h4 className="font-semibold">Group: {group.name}</h4>

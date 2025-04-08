@@ -34,7 +34,9 @@ function CampaignsPage() {
       <h1 className="text-2xl font-bold">Moloco Ad Campaign Manager</h1>
       <CampaignForm fetchCampaigns={fetchCampaigns} />
      <CampaignList campaigns={campaigns} setCampaigns={setCampaigns} fetchCampaigns={fetchCampaigns} />
-    </div>
+     <p className="text-green-400 text-lg font-bold">Tailwind works!</p>
+     </div>
+
   );
 }
 

@@ -13,11 +13,6 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
 
   const createCampaign = async () => {
     if (!name) return alert("Campaign name required");
-    // campaign_id: Optional[str] = None  
-    // name: str
-    // creative_groups_ids: List[str]  
-    // status: str = "paused"
-    // impressions: int = 0
 
     try {
       await axios.post("http://127.0.0.1:8000/campaigns/", {
@@ -39,6 +34,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
   return (
     <div className="p-4">
       <h2>Create Campaign</h2>
+      <div className="text-green-400 text-lg font-bold">Tailwind works!</div>
       <input
         type="text"
         placeholder="Campaign Name"
