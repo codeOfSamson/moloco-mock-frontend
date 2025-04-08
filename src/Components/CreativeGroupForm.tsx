@@ -87,9 +87,6 @@ export default function CampaignCreativeForm() {
 
   const handleSubmit = async () => {
 
-    //const campaign_id = campaignId;
-
-
     try {
       // Upload creatives one by one
       for (const group of creativeGroups) {

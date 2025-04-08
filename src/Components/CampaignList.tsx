@@ -1,13 +1,31 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
-type Campaign = {
+// Type definitions
+interface Creative {
+  creative_id: string;
+  type: string;
+  auto_endcard: boolean;
+  file_url: string;
+}
+
+interface CreativeGroup {
+  creative_group_id: string;
+  name: string;
+  creative_ids: string[];
+  creatives?: Creative[];
+}
+
+interface Campaign {
   campaign_id: string;
   name: string;
   creative_group_ids: string[];
   status: string;
   impressions: number;
-};
+  creative_groups?: CreativeGroup[];
+}
 
 type CampaignListProps = {
   campaigns: Campaign[];
@@ -15,8 +33,10 @@ type CampaignListProps = {
   fetchCampaigns: () => Promise<void>;
 };
 
-const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
+const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListProps) => {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [expandedData, setExpandedData] = useState<Record<string, Campaign>>({});
 
   const runCampaign = async (campaignId: string) => {
     try {
@@ -33,7 +53,20 @@ const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
     navigate(`/creative-groups?name=${name}&campaignId=${campaignId}`);
   };
 
-  console.log(123,campaigns)
+  const toggleExpand = async (campaignId: string) => {
+    if (expanded === campaignId) {
+      setExpanded(null);
+      return;
+    }
+
+    try {
+      const res = await axios.get<Campaign>(`http://127.0.0.1:8000/campaigns/${campaignId}/full`);
+      setExpanded(campaignId);
+      setExpandedData((prev) => ({ ...prev, [campaignId]: res.data }));
+    } catch (error) {
+      console.error("Failed to fetch full campaign data", error);
+    }
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -44,9 +77,15 @@ const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
             key={campaign.campaign_id}
             className="bg-white shadow-md rounded-xl p-5 border border-gray-200"
           >
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-              <div>
-                <h3 className="text-lg font-bold text-gray-800">{campaign.name}</h3>
+            <div className="flex justify-between items-start">
+              <div className="flex-1">
+                <button
+                  onClick={() => toggleExpand(campaign.campaign_id)}
+                  className="flex items-center gap-2 text-left text-lg font-bold text-gray-800 hover:underline"
+                >
+                  {expanded === campaign.campaign_id ? <ChevronUp /> : <ChevronDown />}
+                  {campaign.name}
+                </button>
                 <p className="text-sm text-gray-600">
                   Status: {campaign.status} | Impressions: {campaign.impressions}
                 </p>
@@ -66,6 +105,36 @@ const CampaignList = ({ campaigns, fetchCampaigns }: CampaignListProps) => {
                 </button>
               </div>
             </div>
+
+            {expanded === campaign.campaign_id && expandedData[campaign.campaign_id] && (
+              <div className="mt-4 border-t pt-4">
+                {expandedData[campaign.campaign_id].creative_groups?.map((group) => (
+                  <div key={group.creative_group_id} className="mb-3">
+                    <h4 className="font-semibold">Group: {group.name}</h4>
+                    <table className="w-full text-sm text-left border mt-2">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="p-2 border">Creative ID</th>
+                          <th className="p-2 border">Type</th>
+                          <th className="p-2 border">File URL</th>
+                          <th className="p-2 border">Auto Endcard</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {group.creatives?.map((creative) => (
+                          <tr key={creative.creative_id}>
+                            <td className="p-2 border">{creative.creative_id}</td>
+                            <td className="p-2 border">{creative.type}</td>
+                            <td className="p-2 border">{creative.file_url}</td>
+                            <td className="p-2 border">{creative.auto_endcard ? "Yes" : "No"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
