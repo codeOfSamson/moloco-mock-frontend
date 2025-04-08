@@ -21,7 +21,7 @@ export default function CampaignCreativeForm() {
   const [creativeGroups, setCreativeGroups] = useState<CreativeGroup[]>([]);
   const [searchParams] = useSearchParams();
   const campaignId = searchParams?.get("campaignId")
-
+  console.log('here,', campaignId)
   const addCreativeGroup = () => {
     setCreativeGroups((prev) => [
       ...prev,
@@ -87,7 +87,8 @@ export default function CampaignCreativeForm() {
 
   const handleSubmit = async () => {
 
-    const campaign_id = campaignId;
+    //const campaign_id = campaignId;
+
 
     try {
       // Upload creatives one by one
@@ -98,17 +99,15 @@ export default function CampaignCreativeForm() {
         }
 
         await axios.post("http://localhost:8000/creative-groups", {
-          group_id: group.group_id,
-          group_name: group.group_name,
+          creative_group_id: group.group_id,
+          name: group.group_name,
           creative_ids: group.creatives.map((c) => c.creative_id),
         });
       }
 
       // Upload campaign last, linking creative group IDs
-      await axios.put("http://localhost:8000/campaigns/${campaignId}", {
-        campaign_id,
+      await axios.put(`http://localhost:8000/campaigns/${campaignId}/attach-groups`, {
         creative_group_ids: creativeGroups.map((g) => g.group_id),
-    
       });
 
       alert("Campaign and assets uploaded successfully!");
