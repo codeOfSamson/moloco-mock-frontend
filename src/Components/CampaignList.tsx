@@ -15,7 +15,11 @@ interface CreativeGroup {
   name: string;
   creative_ids: string[];
   creatives?: Creative[];
+  impressions?: number;
+  clicks?: number;
+  conversions?: number;
 }
+
 
 interface Campaign {
   campaign_id: string;
@@ -36,6 +40,9 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [expandedData, setExpandedData] = useState<Record<string, Campaign>>({});
+  const [analyzingCampaign, setAnalyzingCampaign] = useState<Campaign | null>(null);
+  const [sortedGroups, setSortedGroups] = useState<CreativeGroup[]>([]);
+
 
   const runCampaign = async (campaignId: string) => {
     try {
@@ -107,7 +114,17 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
 
             {expanded === campaign.campaign_id && expandedData[campaign.campaign_id] && (
               <div className="mt-4 border-t pt-4">
-                
+                <button
+                    onClick={() => {
+                      const groups = [...(expandedData[campaign.campaign_id]?.creative_groups || [])];
+                      const sorted = groups.sort((a, b) => (b.conversions || 0) - (a.conversions || 0));
+                      setSortedGroups(sorted);
+                      setAnalyzingCampaign(expandedData[campaign.campaign_id]);
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm transition mt-2"
+                  >
+                    Analyze Campaign Results
+                  </button>
                 {expandedData[campaign.campaign_id].creative_groups?.map((group) => (
                   <div key={group.creative_group_id} className="mb-3">
                     <h4 className="font-semibold text-black">Group: {group.name}</h4>
@@ -138,6 +155,61 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
           </div>
         ))}
       </div>
+      {analyzingCampaign && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-xl shadow-lg max-w-2xl w-full">
+      <h3 className="text-xl font-bold mb-4">Results for: {analyzingCampaign.name}</h3>
+      <table className="w-full text-sm text-left text-black border mb-4">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="p-2 border">Group Name</th>
+            <th className="p-2 border">Impressions</th>
+            <th className="p-2 border">Clicks</th>
+            <th className="p-2 border">Conversions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedGroups.map((group) => (
+            <tr key={group.creative_group_id}>
+              <td className="p-2 border">{group.name}</td>
+              <td className="p-2 border">{group.impressions}</td>
+              <td className="p-2 border">{group.clicks}</td>
+              <td className="p-2 border">{group.conversions}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="flex justify-between">
+        <button
+          onClick={async () => {
+            const topGroup = sortedGroups[0];
+            try {
+              await axios.post("http://127.0.0.1:8000/campaigns/champion-waitlist/add", {
+                group_id: topGroup.creative_group_id,
+              });
+              alert(`Added ${topGroup.name} to Champion Waitlist!`);
+            } catch (error) {
+              console.error("Error adding to Champion Waitlist", error);
+              alert("Failed to add to waitlist.");
+            }
+          }}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm"
+        >
+          Send Top Group to Champion Waitlist
+        </button>
+
+        <button
+          onClick={() => setAnalyzingCampaign(null)}
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
