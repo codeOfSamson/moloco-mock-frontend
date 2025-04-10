@@ -83,8 +83,6 @@ export default function CampaignCreativeForm() {
     setCreativeGroups(updatedGroups);
   };
 
-  console.log(99, creativeGroups)
-
   const handleSubmit = async () => {
 
     try {
@@ -102,14 +100,12 @@ export default function CampaignCreativeForm() {
         });
       }
 
-      // Upload campaign last, linking creative group IDs
       await axios.put(`http://localhost:8000/campaigns/${campaignId}/attach-groups`, {
         creative_group_ids: creativeGroups.map((g) => g.group_id),
       });
 
       alert("Campaign and assets uploaded successfully!");
-      // Reset form
-      //setCampaignName("");
+    
       setCreativeGroups([]);
     } catch (err) {
       console.error("Upload error:", err);
@@ -120,7 +116,7 @@ export default function CampaignCreativeForm() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Create Campaign</h1>
+        <h1 className="text-3xl font-bold">Campaign Setup</h1>
         <button
           onClick={handleSubmit}
           className="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700"
@@ -128,60 +124,91 @@ export default function CampaignCreativeForm() {
           Submit All
         </button>
       </div>
-
-      <div className="space-y-8">
-        {creativeGroups.map((group, groupIndex) => (
-          <div key={group.group_id} className="border p-4 rounded shadow">
-            <input
-              type="text"
-              placeholder="Creative Group Name"
-              value={group.group_name}
-              onChange={(e) =>
-                updateCreativeGroup(groupIndex, "group_name", e.target.value)
-              }
-              className="border p-2 w-full mb-4"
-            />
-            {group.creatives.map((creative, creativeIndex) => (
-              <div key={creative.creative_id} className="mb-4 space-y-2">
-                <input
-                  type="text"
-                  placeholder="File URL"
-                  value={creative.file_url}
-                  onChange={(e) =>
-                    updateCreative(groupIndex, creativeIndex, "file_url", e.target.value)
-                  }
-                  className="border p-2 w-full"
-                />
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={creative.auto_endcard}
-                    onChange={(e) =>
-                      updateCreative(groupIndex, creativeIndex, "auto_endcard", e.target.checked)
-                    }
-                  />
-                  <span>Auto Endcard</span>
-                </label>
-              </div>
-            ))}
+  
+      {creativeGroups.map((group, groupIndex) => (
+        <div key={group.group_id} className="bg-white shadow rounded-xl p-6 space-y-4 border">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold underline">Group: {group.group_name || "Untitled"}</h2>
+          </div>
+  
+          <input
+            type="text"
+            placeholder="Enter Creative Group Name"
+            value={group.group_name}
+            onChange={(e) => updateCreativeGroup(groupIndex, "group_name", e.target.value)}
+            className="w-full border p-2 rounded"
+          />
+  
+          <table className="w-full text-sm border mt-2">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="text-left p-2 border">File URL</th>
+                <th className="text-left p-2 border">Type</th>
+                <th className="text-left p-2 border">Auto Endcard</th>
+              </tr>
+            </thead>
+            <tbody>
+              {group.creatives.map((creative, creativeIndex) => (
+                <tr key={creative.creative_id}>
+                  <td className="p-2 border">
+                    <input
+                      type="text"
+                      value={creative.file_url}
+                      onChange={(e) =>
+                        updateCreative(groupIndex, creativeIndex, "file_url", e.target.value)
+                      }
+                      className="w-full border p-1 rounded"
+                    />
+                  </td>
+                  <td className="p-2 border">
+                    <select
+                      value={creative.type}
+                      onChange={(e) =>
+                        updateCreative(groupIndex, creativeIndex, "type", e.target.value)
+                      }
+                      className="border rounded p-1 w-full"
+                    >
+                      <option value="VIDEO">VIDEO</option>
+                      <option value="IMAGE">IMAGE</option>
+                    </select>
+                  </td>
+                  <td className="p-2 border">
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={creative.auto_endcard}
+                        onChange={(e) =>
+                          updateCreative(groupIndex, creativeIndex, "auto_endcard", e.target.checked)
+                        }
+                      />
+                      <span>Yes</span>
+                    </label>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+  
+          <div className="text-right">
             <button
               onClick={() => addCreativeToGroup(groupIndex)}
-              className="bg-blue-500 text-white px-4 py-1 rounded"
+              className="bg-blue-500 text-white px-4 py-1 rounded shadow hover:bg-blue-600"
             >
               + Add Creative
             </button>
           </div>
-        ))}
-      </div>
-
-      <div className="pt-4">
+        </div>
+      ))}
+  
+      <div className="text-right">
         <button
           onClick={addCreativeGroup}
-          className="bg-indigo-500 text-white px-6 py-2 rounded hover:bg-indigo-600"
+          className="bg-indigo-600 text-white px-6 py-2 rounded shadow hover:bg-indigo-700"
         >
           + Add Creative Group
         </button>
       </div>
     </div>
   );
+  
 }

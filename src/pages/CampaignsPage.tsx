@@ -31,7 +31,7 @@ function CampaignsPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold">Moloco Ad Campaign Manager</h1>
+      <h1 className="text-center text-2xl font-bold">Moloco Ad Campaign Manager</h1>
       <CampaignForm fetchCampaigns={fetchCampaigns} />
      <CampaignList campaigns={campaigns} setCampaigns={setCampaigns} fetchCampaigns={fetchCampaigns} />
      </div>

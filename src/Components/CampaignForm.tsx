@@ -33,16 +33,15 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
 
   return (
     <div className="p-4">
-      <h2>Create Campaign</h2>
-      <div className="text-green-400 text-lg font-bold">Tailwind works!</div>
+      <h1>Create New Campaign:</h1>
       <input
         type="text"
         placeholder="Campaign Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="border p-2"
+        className="border rounded p-2"
       />
-      <button onClick={()=>{createCampaign()}} className="bg-blue-500 text-white p-2 ml-2">
+      <button onClick={()=>{createCampaign()}} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm m-2">
         Create
       </button>
     </div>
