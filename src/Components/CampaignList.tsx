@@ -78,13 +78,14 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
   const fetchChampions = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/campaigns/champion-waitlist");
-      setChampions(res.data);
+      setChampions(res.data?.groups);
       setShowChampionsModal(true);
     } catch (error) {
       console.error("Failed to fetch champions", error);
       alert("Could not load champions list.");
     }
   };
+
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
@@ -258,7 +259,7 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
           <div className="bg-white p-8 rounded-2xl shadow-xl max-w-3xl w-full space-y-6">
             <h3 className="text-2xl font-bold text-gray-800">Champion Creative Groups</h3>
 
-            {champions.length === 0 ? (
+            {champions?.length === 0 ? (
               <p className="text-gray-600">No champions have been added yet...</p>
             ) : (
               <div className="overflow-x-auto">
