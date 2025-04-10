@@ -2,6 +2,8 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 
 type Creative = {
@@ -21,7 +23,8 @@ export default function CampaignCreativeForm() {
   const [creativeGroups, setCreativeGroups] = useState<CreativeGroup[]>([]);
   const [searchParams] = useSearchParams();
   const campaignId = searchParams?.get("campaignId")
-  console.log('here,', campaignId)
+  const navigate = useNavigate();
+
   const addCreativeGroup = () => {
     setCreativeGroups((prev) => [
       ...prev,
@@ -107,6 +110,8 @@ export default function CampaignCreativeForm() {
       alert("Campaign and assets uploaded successfully!");
     
       setCreativeGroups([]);
+      navigate(`/`);
+
     } catch (err) {
       console.error("Upload error:", err);
       alert("Something went wrong during upload.");
@@ -116,10 +121,10 @@ export default function CampaignCreativeForm() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Campaign Setup</h1>
+        <h1 className="text-xl font-bold">{ creativeGroups?.length <= 0 ? 'No groups added yet...' : ''} </h1>
         <button
           onClick={handleSubmit}
-          className="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700"
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm"
         >
           Submit All
         </button>
@@ -192,7 +197,7 @@ export default function CampaignCreativeForm() {
           <div className="text-right">
             <button
               onClick={() => addCreativeToGroup(groupIndex)}
-              className="bg-blue-500 text-white px-4 py-1 rounded shadow hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-1 rounded-xl shadow hover:bg-blue-600"
             >
               + Add Creative
             </button>
@@ -203,7 +208,7 @@ export default function CampaignCreativeForm() {
       <div className="text-right">
         <button
           onClick={addCreativeGroup}
-          className="bg-indigo-600 text-white px-6 py-2 rounded shadow hover:bg-indigo-700"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm"
         >
           + Add Creative Group
         </button>

@@ -20,7 +20,6 @@ interface CreativeGroup {
   conversions?: number;
 }
 
-
 interface Campaign {
   campaign_id: string;
   name: string;
@@ -36,14 +35,14 @@ type CampaignListProps = {
   fetchCampaigns: () => Promise<void>;
 };
 
-// ... imports remain the same
-
 const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListProps) => {
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [expandedData, setExpandedData] = useState<Record<string, Campaign>>({});
   const [analyzingCampaign, setAnalyzingCampaign] = useState<Campaign | null>(null);
   const [sortedGroups, setSortedGroups] = useState<CreativeGroup[]>([]);
+  const [showChampionsModal, setShowChampionsModal] = useState(false);
+  const [champions, setChampions] = useState<CreativeGroup[]>([]);
 
   const runCampaign = async (campaignId: string) => {
     try {
@@ -76,9 +75,20 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
     }
   };
 
+  const fetchChampions = async () => {
+    try {
+      const res = await axios.get("http://127.0.0.1:8000/campaigns/champion-waitlist");
+      setChampions(res.data);
+      setShowChampionsModal(true);
+    } catch (error) {
+      console.error("Failed to fetch champions", error);
+      alert("Could not load champions list.");
+    }
+  };
+
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Campaigns List:</h2>
+      <h2 className="text-xl font-bold text-gray-800">Campaigns List:</h2>
 
       {campaigns?.map((campaign) => (
         <div
@@ -93,6 +103,7 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
               {expanded === campaign.campaign_id ? <ChevronUp /> : <ChevronDown />}
               {campaign.name}
             </button>
+
             <div className="flex gap-3 flex-wrap">
               <button
                 onClick={() => handleAttachCreativeGroup(campaign.name, campaign.campaign_id)}
@@ -112,21 +123,41 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
           <p className="text-sm text-gray-600">
             Status: <span className="font-medium">{campaign.status}</span> | Impressions:{" "}
             <span className="font-medium">{campaign.impressions}</span>
+          
           </p>
-
+          <p className="text-sm text-gray-600">
+          {expanded === null ? (
+              'Expand to see more Campaign details...'
+            ) : (
+              ""
+            )}
+            </p>
           {expanded === campaign.campaign_id && expandedData[campaign.campaign_id] && (
             <div className="pt-4 border-t space-y-4">
-              <button
-                onClick={() => {
-                  const groups = [...(expandedData[campaign.campaign_id]?.creative_groups || [])];
-                  const sorted = groups.sort((a, b) => (b.conversions || 0) - (a.conversions || 0));
-                  setSortedGroups(sorted);
-                  setAnalyzingCampaign(expandedData[campaign.campaign_id]);
-                }}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm"
-              >
-                Analyze Campaign Results
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    const groups = [
+                      ...(expandedData[campaign.campaign_id]?.creative_groups || []),
+                    ];
+                    const sorted = groups.sort(
+                      (a, b) => (b.conversions || 0) - (a.conversions || 0)
+                    );
+                    setSortedGroups(sorted);
+                    setAnalyzingCampaign(expandedData[campaign.campaign_id]);
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  Analyze Campaign Results
+                </button>
+
+                <button
+                  onClick={fetchChampions}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl text-sm"
+                >
+                  See Champions List
+                </button>
+              </div>
 
               {expandedData[campaign.campaign_id].creative_groups?.map((group) => (
                 <div key={group.creative_group_id} className="border rounded-lg p-4 bg-gray-50">
@@ -147,7 +178,9 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
                             <td className="p-2 border">{creative.creative_id}</td>
                             <td className="p-2 border">{creative.type}</td>
                             <td className="p-2 border truncate">{creative.file_url}</td>
-                            <td className="p-2 border">{creative.auto_endcard ? "Yes" : "No"}</td>
+                            <td className="p-2 border">
+                              {creative.auto_endcard ? "Yes" : "No"}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -219,9 +252,52 @@ const CampaignList = ({ campaigns, setCampaigns, fetchCampaigns }: CampaignListP
           </div>
         </div>
       )}
+
+      {showChampionsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-2xl shadow-xl max-w-3xl w-full space-y-6">
+            <h3 className="text-2xl font-bold text-gray-800">Champion Creative Groups</h3>
+
+            {champions.length === 0 ? (
+              <p className="text-gray-600">No champions have been added yet...</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left text-gray-700 border">
+                  <thead className="bg-gray-100 font-medium">
+                    <tr>
+                      <th className="p-2 border">Group Name</th>
+                      <th className="p-2 border">Impressions</th>
+                      <th className="p-2 border">Clicks</th>
+                      <th className="p-2 border">Conversions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {champions?.map((group) => (
+                      <tr key={group.creative_group_id}>
+                        <td className="p-2 border">{group.name}</td>
+                        <td className="p-2 border">{group.impressions}</td>
+                        <td className="p-2 border">{group.clicks}</td>
+                        <td className="p-2 border">{group.conversions}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowChampionsModal(false)}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-xl text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CampaignList;
-

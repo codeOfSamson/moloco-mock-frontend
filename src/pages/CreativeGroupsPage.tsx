@@ -15,9 +15,9 @@ const CreativeGroupsPage = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-800">Creative Groups</h1>
+            <h1 className="text-2xl font-semibold text-gray-800 align-center">Campaign Setup for: {campaignName}</h1>
             <p className="text-gray-500 mt-1">
-              Add a new creative group to <span className="font-medium text-blue-600">{campaignName}</span>
+              Add a new creative groups to <span className="font-larg text-blue-600">{campaignName}</span>
             </p>
           </div>
           <button
@@ -27,8 +27,10 @@ const CreativeGroupsPage = () => {
             ← Back to Campaigns
           </button>
         </div>
+        <h1 className="text-xl font-bold p-2">Creative Groups List:</h1>
 
         <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+          
           <CreativeGroupForm />
         </div>
       </div>
