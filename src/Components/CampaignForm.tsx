@@ -32,8 +32,8 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ fetchCampaigns }) => {
   };
 
   return (
-    <div className="p-4">
-      <h1>Create New Campaign:</h1>
+    <div className="pl-9  ">
+      <h1 className="font-bold ">Create New Campaign:</h1>
       <input
         type="text"
         placeholder="Campaign Name"
