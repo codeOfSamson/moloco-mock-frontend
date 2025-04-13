@@ -21,9 +21,7 @@ Analyze campaign results and track top-performing groups in a "Champion List"
 ( Make sure Backed is running first, see readme to setup and run https://github.com/codeOfSamson/moloco-mockAPI.)
 
 1) Download zip or clone this repo and navigate to project folder in terminal or IDE.
-
-When in terminal or favorite IDE.   See Backend readme for instructions.
-Enter in terminal:
+Enter in terminal
 2) run 'npm install'
 3) run 'npm run dev'
 
