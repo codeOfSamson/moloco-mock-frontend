@@ -92,7 +92,6 @@ export default function CampaignCreativeForm() {
       // Upload creatives one by one
       for (const group of creativeGroups) {
         for (const creative of group.creatives) {
-          console.log('prepost',creative)
           await axios.post("http://localhost:8000/creatives", creative);
         }
 
