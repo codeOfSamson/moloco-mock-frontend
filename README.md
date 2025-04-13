@@ -29,6 +29,7 @@ Enter in terminal
 
 # A note on the features and the functionality:
  Since this is just a mock-up, my main goal was to display my ability to learn and apply new concepts. This is not meant to be a fully robust app. If it were, then here is an initial list of things I would add:
+  - Improved and consistent styling for a more appealing design.
   - Build DB, instead of using in memory.
   - Have user profiles, with registration and login pages.
   - Workplace accouts for ad accounts to belong to larger organizations
