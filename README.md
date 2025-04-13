@@ -1,42 +1,41 @@
-# moloco-mock-frontend
-Moloco Ad Campaign Manager Frontend app, an interface for my moc-up Moloco Api:
+# Moloco-mock-frontend
+Moloco Ad Campaign Manager Frontend app, an interface for my mock-up Moloco Api:
 
-Features:
-Create Campaign
-Input a campaign name and create a new campaign instantly.
+Built with React + Typescript, Tailwind css and Vite.
 
-Campaign List View
-Displays all campaigns with expandable detail sections.
+This platform that allows you to:
 
-Attach Creative Group
-Assign creative groups to specific campaigns with dynamic UI controls.
+Create and manage ad campaigns
 
-Run Campaign
-Simulates a campaign by assigning randomized impressions, clicks, and conversions to each creative group.
+Attach creative groups with creatives (videos)
 
-Analyze Campaign Results
-Shows performance metrics of each creative group, sorted by conversions.
+Simulate campaign performance (impressions, clicks, conversions)
 
-Champion Modal
-Displays top-performing creative groups in a modern, responsive modal.
+Analyze campaign results and track top-performing groups in a "Champion List"
 
-Responsive UI
-Built with Tailwind CSS for clean, modern styling and responsiveness.
+#Prerequisites
+-Node.js (v18 or higher recommended)
+-npm or yarn
 
-Dynamic Modals & State Management
-Uses React useState and prop drilling for modal visibility and data flow.
+#Steps to run:
+( Make sure Backed is running first, see readme to setup and run https://github.com/codeOfSamson/moloco-mockAPI.)
 
+1) Download zip or clone this repo and navigate to project folder in terminal or IDE.
 
+When in terminal or favorite IDE.   See Backend readme for instructions.
+Enter in terminal:
+2) run 'npm install'
+3) run 'npm run dev'
 
-Open in terminal or favorite IDE.  Make sure Backed is running first.  See Backend readme for instructions.
-Steps to Run, enter in terminal:
-1) run 'npm install'
-2) run 'npm run dev'
+4) Then open up your browser at : ➜  Local:   http://localhost:5173/
 
-3) Then open up your browser at : ➜  Local:   http://localhost:5173/
+# A note on the features and the functionality:
+ Since this is just a mock-up, my main goal was to display my ability to learn and apply new concepts. This is not meant to be a fully robust app. If it were, then here is an initial list of things I would add:
+  - Build DB, instead of using in memory.
+  - Have user profiles, with registration and login pages.
+  - Workplace accouts for ad accounts to belong to larger organizations
+  - Full CRUD functionality.
+  - A more complete interface for Champions list, in order to add and remove to Groups and campaigns based on results.
+  - Allow other types of creatives to be uploaded.
 
-# A note on the features:
-Right now , since this is just a mock-up, all this user data is stored in memory. In a full version of this app,  I would build a DB to persist user data and create user, and user login pages.  In this current mock-up I am assuming that you are already logged in to an ad account, but in a full app there would also be work place accounts so that people ad accounts could belong to larger organizations.  
-
-# A note about the functionality.
- I felt that  the most important parts of this assignment were to display my ability to complete the basic tasks outlined in the specs, i.e., build a complete campaign and run it,  as well as demonstrate my ability to learn and apply new concepts like in Moloco API docs.  For this reason there is not full CRUD functionality around the Campaigns, and their groups.  Right now it’s all just create. In a full app, there would of course be full CRUD functionality.  I would also add a more complete feature to interface the champions list. Right now it’s just a read only list and not restricted by groups or campaigns. In the full app , I would add a feature to seamlessly drag and drop champions into new groups.  Lastly,  a full app would allow other  types of creatives to be uploaded.  
+ 
